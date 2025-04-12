@@ -1,4 +1,4 @@
-package org.example.kmpmovies.data
+package org.example.kmpmovies.data.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

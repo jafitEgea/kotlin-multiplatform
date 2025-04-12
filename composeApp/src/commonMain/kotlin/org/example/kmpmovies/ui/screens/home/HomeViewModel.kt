@@ -1,34 +1,37 @@
 package org.example.kmpmovies.ui.screens.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.example.kmpmovies.data.Movie
 import org.example.kmpmovies.data.MoviesRepository
-import org.example.kmpmovies.data.RemoteMovie
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class HomeViewModel(
-    private val moviesRepository: MoviesRepository
-) : ViewModel() {
+class HomeViewModel: ViewModel(), KoinComponent {
 
-    var state by mutableStateOf(UiState())
-        private set
+    private val moviesRepository: MoviesRepository by inject()
 
-    init {
+    private val _state = MutableStateFlow(UiState())
+    val state: StateFlow<UiState> = _state.asStateFlow()
+
+
+
+    fun onUiReady() {
         viewModelScope.launch {
-            state = UiState(loading = true)
-            state = UiState(
-                loading = false,
-                movies = moviesRepository.fetchPopularMovies()
-            )
+            _state.value = UiState(loading = true)
+            moviesRepository.popularMovies.collect { movies ->
+                if (movies.isNotEmpty()) {
+                    _state.value = UiState(loading = false, movies = movies)
+                }
+            }
         }
     }
 
     data class UiState(
-        val loading: Boolean = false,
-        val movies: List<Movie> = emptyList()
+        val loading: Boolean = false, val movies: List<Movie> = emptyList()
     )
 }

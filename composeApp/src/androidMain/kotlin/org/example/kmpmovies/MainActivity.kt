@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import org.example.kmpmovies.data.database.getDatabaseBuilder
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,9 @@ class MainActivity : ComponentActivity() {
             // para cambiar el tema de la barra de estado del sistema
             EnableTransparentStatusBar()
             App()
+            // Sin DI
+//            val db = getDatabaseBuilder(this).build()
+//            App(db.moviesDao())
         }
     }
 }

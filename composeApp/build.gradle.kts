@@ -1,6 +1,6 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,11 +9,13 @@ plugins {
     alias(libs.plugins.composeCompiler)
     //Serialization
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidxRoom)
+    alias(libs.plugins.gradleBuildConfig)
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -38,6 +40,10 @@ kotlin {
             //API
             implementation(libs.ktor.client.android)
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.koin.android)
+
+            implementation(libs.play.services.location)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -57,12 +63,28 @@ kotlin {
             implementation(libs.ktor.serialization)
             //navigation
             implementation(libs.androidx.navigation.compose)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqliteBundled)
+
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.moko.permissions)
         }
         iosMain.dependencies {
             //API
             implementation(libs.ktor.client.darwin)
         }
     }
+
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
+
+    task("testClasses")
 }
 
 android {
@@ -94,5 +116,25 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
 }
 
+tasks.withType<KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+buildConfig {
+    packageName("org.example.kmpmovies")
+
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").reader())
+    val apiKey = properties.getProperty("API_KEY")
+    
+    buildConfigField("API_KEY", apiKey)
+}

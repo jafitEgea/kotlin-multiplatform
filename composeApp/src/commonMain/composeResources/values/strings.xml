@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">KmpMovies</string>
     <string name="back">Go Back</string>
+    <string name="favorite">Mark as Favorite</string>
 </resources>

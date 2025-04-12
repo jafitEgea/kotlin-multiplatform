@@ -19,6 +19,16 @@ coil = "3.1.0"
 ktor = "3.1.0"
 #navigation
 navigation-compose = "2.8.0-alpha10"
+#db room
+ksp = "2.1.10-1.0.31"
+androidx-room = "2.7.0-alpha03"
+androidx-sqliteBundled = "2.5.0.-alpha03"
+#buildConfig
+buildConfig = "5.3.5"
+koin = "3.6.0-Beta4"
+koin-compose = "1.2.0-Beta4"
+moko-permissions = "0.18.0"
+playServices = "21.3.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -45,6 +55,19 @@ ktor-client-contentnegotiation = { group = "io.ktor", name = "ktor-client-conten
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 #navigation
 androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+#local db
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+androidx-sqliteBundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "androidx-sqliteBundled" }
+#di
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose" }
+#Permissions
+moko-permissions = { group = "dev.icerock.moko", name = "permissions-compose", version.ref = "moko-permissions" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServices" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -54,3 +77,6 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 #serialization
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidxRoom = { id = "androidx.room", version.ref = "androidx-room" }
+gradleBuildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
